@@ -4,6 +4,9 @@ from datetime import datetime
 FILE_NAME = "sensor.csv"
 TRAIN_FILE_NAME = "train.csv"
 TEST_FILE_NAME = "test.csv"
+TRANSFORMER_OBJECT_FILENAME = "transformer.pkl"
+TARGET_ENCODER_OBJECT_FILE_NAME = "target_encoder.pkl"
+MODEL_FILE_NAME = "model.pkl"
 
 
 class TrainingPipelineConfig:
@@ -32,8 +35,26 @@ class DataIngestionConfig:
 
 
 
-class DataValidationConfig:...
-class DataTransformationConfig:...
+class DataValidationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.data_validation_dir = os.path.join(training_pipeline_config.artifact_dir, "data_validation")
+        self.report_file_path = os.path.join(self.data_validation_dir, "report.yaml")
+        self.missing_threshold:float = 0.7
+        self.base_file_path = os.path.join("aps_failure_training_set1.csv")
+    
+
+
+
+class DataTransformationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.data_transforation_dir = os.path.join(training_pipeline_config.artifact_dir, "data_transformation")
+        self.transform_object_path = os.path.join(self.data_transforation_dir, "transformer", "transform.pkl")
+        self.transformed_train_path = os.path.join(self.data_transforation_dir, "transformed", TRAIN_FILE_NAME)
+        self.transformed_test_path = os.path.join(self.data_transforation_dir, "transformed", TEST_FILE_NAME)
+        self.label_encoder_path = os.path.join(self.data_transforation_dir, "target_encoder", TARGET_ENCODER_OBJECT_FILE_NAME)
+        self
+
+
 class ModelTrainerConfig:...
 class ModelEvaluationConfig:...
 class ModelPusherConfig:...
