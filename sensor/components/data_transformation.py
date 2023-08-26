@@ -5,10 +5,10 @@ from typing import Optional
 import os, sys
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import Pipeline
+from sklearn.preprocessing import LabelEncoder, RobustScaler
+from sklearn.pipeline import Pipeline
 from imblearn.combine import SMOTETomek
-from sklearn.impute import SimpleImputer, RobustScaler
+from sklearn.impute import SimpleImputer
 from sensor import utils
 from sensor.config import TARGET_COLUMN
 
@@ -95,7 +95,7 @@ class DataTransformation:
                                 obj=label_encoder)
 
             data_transformation_artifact = artifact_entity.DataTransformationArtifact(
-                transformed_object_path = self.data_transformation_config.transform_object_path,
+                transform_object_path = self.data_transformation_config.transform_object_path,
                 transformed_train_path = self.data_transformation_config.transformed_train_path,
                 transformed_test_path = self.data_transformation_config.transformed_test_path,
                 target_encoder_path = self.data_transformation_config.target_encoder_path
