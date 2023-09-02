@@ -8,6 +8,8 @@ from sensor.components.data_ingestion import DataIngestion
 from sensor.components.data_validation import DataValidation
 from sensor.components.data_transformation import DataTransformation
 from sensor.components.model_trainer import ModelTrainer
+from sensor.components.model_evaluation import ModelEvaluation
+from sensor.components.model_pusher import ModelPusher
 
 
 if __name__=="__main__":
@@ -30,12 +32,28 @@ if __name__=="__main__":
           data_transformation = DataTransformation(data_transformation_config=data_transformation_config,
           data_ingestion_artifact=data_ingestion_artifact)
 
-          data_validation_artifact = data_transformation.initiate_data_transormation()
+          data_transformation_artifact = data_transformation.initiate_data_transormation()
 
           #model Trainer
           model_trainer_config = config_entity.ModelTrainerConfig(training_pipeline_config=training_pipeline_config)
           model_trainer = ModelTrainer(model_trainer_config=model_trainer_config, data_transformation_artifact=data_transformation_config)
           model_trainer_artifact = model_trainer.initiate_model_trainer()
+
+          #Model Evaluation
+          model_eval_config = config_entity.ModelEvaluationConfig(training_pipeline_config=training_pipeline_config)
+          model_eval = ModelEvaluation(model_eval_config=model_eval_config, 
+                                   data_ingestion_artifact=data_ingestion_artifact, 
+                                   data_transformation_artifact=data_transformation_artifact, 
+                                   model_trainer_artifact=model_trainer_artifact)
+          model_evel_artifact = model_eval.initiate_model_evaluation()
+
+          #Model Pusher
+          model_pusher_config = config_entity.ModelPusherConfig(training_pipeline_config=training_pipeline_config)
+          
+          model_pusher = ModelPusher(model_pusher_config=model_pusher_config,
+                                   data_transformation_artifact=data_transformation_artifact,
+                                   model_trainer_artifact=model_trainer_artifact)
+          model_pusher_artifact = model_pusher.initiate_model_pusher()
 
      
      except Exception as e:

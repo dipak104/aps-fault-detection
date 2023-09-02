@@ -63,5 +63,16 @@ class ModelTrainerConfig:
         self.overfitting_thres = 0.1
 
 
-class ModelEvaluationConfig:...
-class ModelPusherConfig:...
+class ModelEvaluationConfig:
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.change_threshold=0.01
+
+class ModelPusherConfig:
+
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.model_pusher_dir = os.path.join(training_pipeline_config.artifact_dir, "model_pusher")
+        self.saved_model_dir  = os.path.join("saved_models")
+        self.pusher_model_dir = os.path.join(self.model_pusher_dir, "saved_models")
+        self.pusher_model_path = os.path.join(self.pusher_model_dir, MODEL_FILE_NAME)
+        self.pusher_transformer_path = os.path.join(self.pusher_model_dir, TRANSFORMER_OBJECT_FILENAME)
+        self.pusher_target_encoder_path = os.path.join(self.pusher_model_dir, TARGET_ENCODER_OBJECT_FILE_NAME)
